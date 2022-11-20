@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
 use App\Models\Attribute;
-use App\Models\AttributeValue;
 use App\Models\Product;
-use App\Models\ProductAttribute;
-use App\Models\Property;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ProductStock;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,64 +24,47 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
-        Product::create(['name' => 'Product One']);
-        Attribute::create(['name' => 'size']);
-        Attribute::create(['name' => 'color']);
-
-        AttributeValue::create([
-            'attribute_id' => 1,
-            'value' => 'XL'
+        Attribute::create([
+            'name' => 'Size',
+            'values' => ['md', 'lg', 'xl']
         ]);
-        AttributeValue::create([
-            'attribute_id' => 1,
-            'value' => 'M'
+        Attribute::create([
+            'name' => 'Color',
+            'values' => ['red', 'green', 'blue']
         ]);
-        AttributeValue::create([
-            'attribute_id' => 2,
-            'value' => 'red'
-        ]);
-        AttributeValue::create([
-            'attribute_id' => 2,
-            'value' => 'Green'
+        Attribute::create([
+            'name' => 'Ram',
+            'values' => ['4GB', '8GB', '16GB']
         ]);
 
-        ProductAttribute::create([
-            'product_id' => 1,
-            'attribute_id' => 1,
-            'attribute_value_id' => 1,
-            'price' => 20,
-        ]);
-        ProductAttribute::create([
-            'product_id' => 1,
-            'attribute_id' => 2,
-            'attribute_value_id' => 4,
-            'price' => 22,
-        ]);
+        Product::factory(10)->create();
 
-
-
-
-
-        Property::create([
-            'product_id' => 1,
-            'size' => 'M',
-            'color' => ['red', 'green'],
-            'price' => 20,
-        ]);
-        Property::create([
-            'product_id' => 1,
-            'size' => 'L',
-            'color' => ['red', 'blue'],
-            'price' => 25,
-        ]);
-
-
-
-
-
-
-
-        
+        $products = Product::all();
+        foreach ($products as $key => $product) {
+            if ($product->varient) {
+                $attrs = Attribute::all();
+                $opt = [];
+                foreach ($attrs as $value) {
+                    $opt[$value->name] = $value->values;
+                }
+                $product->update([
+                    'attributes' => $attrs->pluck('id'),
+                    'options' => $opt,
+                ]);
+                foreach($opt as $key => $value) {
+                    $opt_txt = $key;
+                    foreach($value as $val) {
+                        ProductStock::create([
+                            'product_id' => $product->id,
+                            'variant' => $opt_txt.'-'.$val,
+                            'sku' => $opt_txt.'-'.$val,
+                            'price' => rand(100, 500),
+                            'quantity' => 10,
+                        ]);
+                    }
+                }
+            }
+        }
     }
 }
+

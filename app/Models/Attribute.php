@@ -9,5 +9,7 @@ class Attribute extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $casts = [
+        'values' => 'array'
+    ];
 }
