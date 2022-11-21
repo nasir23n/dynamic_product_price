@@ -10,13 +10,18 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
+    
     // attributes
 
     protected function attributes(): Attribute {
         return Attribute::make(
             get: function($value) {
-                $attrs = ModelsAttribute::whereIn('id', json_decode($value))->get();
-                return $attrs->pluck('name');
+                if ($value) {
+                    $attrs = ModelsAttribute::whereIn('id', json_decode($value))->get();
+                    return $attrs->pluck('name');
+                }
+                return $value;
             }
         );
     }

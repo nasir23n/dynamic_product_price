@@ -4,19 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Models\Attribute;
 use App\Models\Product;
+use App\Models\ProductStock;
+use GuzzleHttp\Promise\Each;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index() {
-        $products = Product::where('varient', 1)->with('stock')->get();
 
-        return view('welcome', compact('products'));
+
+    public function index() {
+        $products = Product::with('stock')->get();
+        // return arrayGetRandom(['4GB', '8GB', '16GB', '32GB']);
+        // return arrayCross(Attribute::pluck('values'));
+        // $attrs = Attribute::all();
+        // $opt = [];
+        // foreach ($attrs as $value) {
+        //     $opt[$value->name] = $value->values;
+        // }
+        // dd($opt);
+        // $cross = arrayCross($opt);
+        // return $products;
+        return view('home', compact('products'));
     }
 
     public function varient_price(Request $request) {
         $product = Product::with('stock')->find($request->pid);
-        return $product;
+        return view('varient_content', compact('product'));
         // $str = '';
         // $quantity = 0;
         // $tax = 0;

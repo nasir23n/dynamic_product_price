@@ -26,18 +26,41 @@ class DatabaseSeeder extends Seeder
         // ]);
         Attribute::create([
             'name' => 'Size',
-            'values' => ['md', 'lg', 'xl']
+            'values' => arrayGetRandom(['md', 'lg', 'xl'])
         ]);
         Attribute::create([
             'name' => 'Color',
-            'values' => ['red', 'green', 'blue']
+            'values' => arrayGetRandom(['red', 'green', 'blue', 'black', 'purple'])
         ]);
         Attribute::create([
             'name' => 'Ram',
-            'values' => ['4GB', '8GB', '16GB']
+            'values' => arrayGetRandom(['4GB', '8GB', '16GB', '32GB'])
         ]);
 
         Product::factory(10)->create();
+
+        $products = Product::all();
+
+        // foreach ($products as $product) {
+            // $attrs = Attribute::all();
+            // $product->update([
+            //     'attributes' => $attrs->pluck('id'),
+            //     'options' => Attribute::pluck('values')
+            // ]);
+
+            // if ($product->varient) {
+            //     $cross = arrayCross(Attribute::pluck('values'));
+            //     foreach ($cross as $cr) {
+            //         ProductStock::create([
+            //             'product_id' => $product->id,
+            //             'variant' => implode('-', $cr),
+            //             'sku' => implode('-', $cr),
+            //             'price' => rand(100, 500),
+            //             'quantity' => 10,
+            //         ]);
+            //     }
+            // }
+        // }
 
         $products = Product::all();
         foreach ($products as $key => $product) {
@@ -51,17 +74,15 @@ class DatabaseSeeder extends Seeder
                     'attributes' => $attrs->pluck('id'),
                     'options' => $opt,
                 ]);
-                foreach($opt as $key => $value) {
-                    $opt_txt = $key;
-                    foreach($value as $val) {
-                        ProductStock::create([
-                            'product_id' => $product->id,
-                            'variant' => $opt_txt.'-'.$val,
-                            'sku' => $opt_txt.'-'.$val,
-                            'price' => rand(100, 500),
-                            'quantity' => 10,
-                        ]);
-                    }
+                $cross = arrayCross($opt);
+                foreach ($cross as $cr) {
+                    ProductStock::create([
+                        'product_id' => $product->id,
+                        'variant' => implode('-', $cr),
+                        'sku' => implode('-', $cr),
+                        'price' => rand(100, 500),
+                        'quantity' => 10,
+                    ]);
                 }
             }
         }
