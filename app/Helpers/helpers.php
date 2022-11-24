@@ -30,3 +30,4 @@ function arrayGetRandom($arr) {
     $ar_rand = ($rand == 1) ? [array_rand($arr, $rand)] : array_rand($arr, $rand);
     return valuesByKeys($arr, $ar_rand);
 }
+

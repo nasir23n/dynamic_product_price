@@ -28,7 +28,23 @@ class ProductController extends Controller
     }
 
     public function varient_price(Request $request) {
+        $product = Product::with('stock')->find($request->product_id);
+
+        $str = '';
+        foreach ($product->attributes as $key => $item) {
+            if($str != null){
+                $str .= '-'.str_replace(' ', '', $request['variation_'.$key]);
+            }
+            else{
+                $str .= str_replace(' ', '', $request['variation_'.$key]);
+            }
+        }
+        $varient = ProductStock::where('variant', $str)->first();
+        return $varient;
+    }
+    public function varient_view(Request $request) {
         $product = Product::with('stock')->find($request->pid);
+        // return $product;
         return view('varient_content', compact('product'));
         // $str = '';
         // $quantity = 0;

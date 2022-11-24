@@ -82,6 +82,7 @@ class DatabaseSeeder extends Seeder
                         'sku' => implode('-', $cr),
                         'price' => rand(100, 500),
                         'quantity' => 10,
+                        'image' => $product->image
                     ]);
                 }
             }

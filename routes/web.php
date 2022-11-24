@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\QrController;
 use App\Models\Product;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -19,9 +20,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [\App\Http\Controllers\ProductController::class, 'index']);
+Route::post('/varient_view', [\App\Http\Controllers\ProductController::class, 'varient_view'])->name('varient_view');
 Route::post('/varient_price', [\App\Http\Controllers\ProductController::class, 'varient_price'])->name('varient_price');
 
-
+Route::get('/edit', function() {
+    return view('editor');
+});
 
 
 Route::get('/qr', [QrController::class, 'index']);
@@ -37,6 +41,8 @@ Route::get('/email/verify', function(Request $request) {
 Route::get('/email/resend', function() {
     return view('auth.verify');
 })->name('verification.resend');
+
+Route::post('add-cart', [CartController::class, 'add'])->name('cart.add');
 
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {

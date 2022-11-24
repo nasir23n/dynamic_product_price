@@ -29,10 +29,10 @@
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Product Variation</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -111,11 +111,7 @@
         const myModal = new bootstrap.Modal('#exampleModal', {
             keyboard: true
         });
-        anime({
-            targets: '.btn',
-            translateY: [-100, 0],
-            delay: anime.stagger(50, {from: 'center'})
-        });
+
         document.getElementById('exampleModal').addEventListener('show.bs.modal', function(e) {
             let mparent = $(this);
             mparent.find('.modal-body').html(`
@@ -134,7 +130,7 @@
             
             $.ajax({
                 type: "POST",
-                url: "{{ route('varient_price') }}",
+                url: "{{ route('varient_view') }}",
                 data: {
                     _token: `{{ csrf_token() }}`,
                     pid: id
